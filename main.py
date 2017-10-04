@@ -1,5 +1,4 @@
 import pygame, random
-from class_definitions import *
 
 pygame.init()
 white = (255, 255, 255)
