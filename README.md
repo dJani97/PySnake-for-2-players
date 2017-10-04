@@ -1,4 +1,4 @@
-<h2>PySnake-for-2-players</h2>
+<h1>PySnake-for-2-players</h1>
 
 A Snake game for two players, implemented using PyGame and Python 3
 
