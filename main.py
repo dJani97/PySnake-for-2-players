@@ -1,4 +1,5 @@
 import pygame, random
+from class_definitions import *
 
 pygame.init()
 white = (255, 255, 255)
@@ -37,7 +38,7 @@ apples = set([])
 
 
 class Snake:
-    def __init__(self, pos, vel, angle, image, color = green):
+    def __init__(self, pos, vel, angle, image, color=green):
         self.pos = pos
         self.vel = vel
         self.angle = angle
