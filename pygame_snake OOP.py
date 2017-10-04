@@ -13,6 +13,7 @@ blue = (0, 0, 255)
 yellow = (200, 200, 0)
 light_yellow = (255, 255, 0)
 
+
 green_head = pygame.image.load('data/SnakeHeadGreen.png')
 purple_head = pygame.image.load('data/SnakeHeadPurple.png')
 apple_img = pygame.image.load('data/Apple.png')
@@ -28,6 +29,7 @@ block_size = 20
 apple_size = 32
 apple_count = 1
 pygame.display.set_caption("Snake Game")
+pygame.display.set_icon(apple_img)
 clock = pygame.time.Clock()
 
 direction = "right"
