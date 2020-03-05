@@ -1,11 +1,15 @@
+from enum import IntEnum
 
 """
-Constants file for Snake Game
+ _________ Constants file for Snake Game _________ 
+
 """
+
 
 """
 Game settings
 """
+
 
 fps = 12
 block_size = 20
@@ -15,9 +19,18 @@ apple_count = 1
 res_x = 600
 res_y = 600
 
+
+class Dir(IntEnum):
+    left = 1
+    right = 2
+    down = 3
+    up = 4
+
+
 """
 Colors
 """
+
 
 white = (255, 255, 255)
 black = (0, 0, 0)

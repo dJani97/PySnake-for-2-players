@@ -184,29 +184,29 @@ def game_loop():
 
                 # Snake1 events:
                 if event.key == pygame.K_LEFT:
-                    snake1.key_event("left")
+                    snake1.key_event(Dir.left)
 
                 if event.key == pygame.K_RIGHT:
-                    snake1.key_event("right")
+                    snake1.key_event(Dir.right)
 
                 if event.key == pygame.K_DOWN:
-                    snake1.key_event("down")
+                    snake1.key_event(Dir.down)
 
                 if event.key == pygame.K_UP:
-                    snake1.key_event("up")
+                    snake1.key_event(Dir.up)
 
                 # Snake2 events:
                 if event.key == pygame.K_a:
-                    snake2.key_event("left")
+                    snake2.key_event(Dir.left)
 
                 if event.key == pygame.K_d:
-                    snake2.key_event("right")
+                    snake2.key_event(Dir.right)
 
                 if event.key == pygame.K_s:
-                    snake2.key_event("down")
+                    snake2.key_event(Dir.down)
 
                 if event.key == pygame.K_w:
-                    snake2.key_event("up")
+                    snake2.key_event(Dir.up)
 
                 if event.key == pygame.K_SPACE:
                     pause()

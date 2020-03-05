@@ -33,22 +33,22 @@ class Snake:
     def update(self):
         game_over = False
 
-        if (self.angle == "right") and (self.vel[0] != -block_size):
+        if (self.angle == Dir.right) and (self.vel[0] != -block_size):
             self.vel[0] = +block_size
             self.vel[1] = 0
             self.head = pygame.transform.rotate(self.img, 270)
 
-        if (self.angle == "left") and (self.vel[0] != block_size):
+        if (self.angle == Dir.left) and (self.vel[0] != block_size):
             self.vel[0] = -block_size
             self.vel[1] = 0
             self.head = pygame.transform.rotate(self.img, 90)
 
-        if (self.angle == "up") and (self.vel[1] != block_size):
+        if (self.angle == Dir.up) and (self.vel[1] != block_size):
             self.head = self.img
             self.vel[1] = -block_size
             self.vel[0] = 0
 
-        if (self.angle == "down") and (self.vel[1] != -block_size):
+        if (self.angle == Dir.down) and (self.vel[1] != -block_size):
             self.vel[1] = +block_size
             self.vel[0] = 0
             self.head = pygame.transform.rotate(self.img, 180)
