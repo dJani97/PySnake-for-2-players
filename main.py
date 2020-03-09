@@ -1,9 +1,11 @@
 import pygame
+import serial
 import random
 from constants import *
 
 from model.apple import Apple
 from model.snake import Snake
+from util.serial_reader import SerialReader
 
 pygame.init()
 
@@ -24,6 +26,9 @@ clock = pygame.time.Clock()
 
 direction = "right"
 apples = set([])
+
+serial_reader = SerialReader(daemon=True)
+serial_reader.start()
 
 
 def pause():
@@ -70,10 +75,15 @@ def message_screen(msg, color, y_displace=0, size="small"):
     display.blit(text_surf, text_rect)
 
 
-def generate_random_apple():
-    new_apple = Apple([round(random.randrange(apple_size, res_x - apple_size) / 10) * 10,
-                       round(random.randrange(apple_size, res_y - apple_size) / 10) * 10],
-                      apple_size, display, apple_img)
+def generate_random_apple(snakes):
+    while True:
+        new_apple = Apple([round(random.randrange(apple_size, res_x - apple_size) / 10) * 10,
+                           round(random.randrange(apple_size, res_y - apple_size) / 10) * 10],
+                          apple_size, display, apple_img)
+
+        # if True not in [s.overlaps(new_apple) for s in snakes]:
+        break
+
     return new_apple
 
 
@@ -150,15 +160,16 @@ def game_loop():
     global apple_count
     game_exit = False
     game_over = False
-    while apple_count > len(apples):
-        apple = generate_random_apple()
-        apples.add(apple)
     snake1 = Snake([((res_x / 2 - 5 * block_size) / 10) * 10, (res_y / 20) * 10], [0, 0], None, green_head, display)
     snake2 = Snake([((res_x / 2 - 5 * block_size) / 10) * 10, (res_y / 20) * 10], [0, 0], None, purple_head, display, purple)
+    snakes = [snake1, snake1]
+    while apple_count > len(apples):
+        apple = generate_random_apple(snakes)
+        apples.add(apple)
 
     while not game_exit:
         if apple_count > len(apples):
-            apple = generate_random_apple()
+            apple = generate_random_apple(snakes)
             apples.add(apple)
         elif apple_count < len(apples):
             apples.pop()
@@ -177,36 +188,40 @@ def game_loop():
                         if event.key == pygame.K_SPACE:
                             game_loop()
 
+        if serial_reader.player1_last_dir:
+            snake1.key_event(serial_reader.player1_last_dir)
+        if serial_reader.player2_last_dir:
+            snake2.key_event(serial_reader.player2_last_dir)
+
         for event in pygame.event.get():  # Events LEAD
             if event.type == pygame.QUIT:
                 game_exit = True
             if event.type == pygame.KEYDOWN:
 
-                # Snake1 events:
-                if event.key == pygame.K_LEFT:
-                    snake1.key_event(Dir.left)
+                # # Snake1 events:
+                # if event.key == pygame.K_LEFT:
+                #     snake1.key_event(Dir.left)
+                #
+                # if event.key == pygame.K_RIGHT:
+                #     snake1.key_event(Dir.right)
+                #
+                # if event.key == pygame.K_DOWN:
+                #     snake1.key_event(Dir.down)
+                #
+                # if event.key == pygame.K_UP:
+                #     snake1.key_event(Dir.up)
 
-                if event.key == pygame.K_RIGHT:
-                    snake1.key_event(Dir.right)
-
-                if event.key == pygame.K_DOWN:
-                    snake1.key_event(Dir.down)
-
-                if event.key == pygame.K_UP:
-                    snake1.key_event(Dir.up)
-
-                # Snake2 events:
-                if event.key == pygame.K_a:
-                    snake2.key_event(Dir.left)
-
-                if event.key == pygame.K_d:
-                    snake2.key_event(Dir.right)
-
-                if event.key == pygame.K_s:
-                    snake2.key_event(Dir.down)
-
-                if event.key == pygame.K_w:
-                    snake2.key_event(Dir.up)
+                # # Snake2 events:
+                # if event.key == pygame.K_a:
+                #     snake2.key_event(Dir.left)
+                #
+                # if event.key == pygame.K_d:
+                #     snake2.key_event(Dir.right)
+                #
+                # if event.key == pygame.K_s:
+                #     snake2.key_event(Dir.down)
+                #
+                # if event.key == pygame.K_w:
 
                 if event.key == pygame.K_SPACE:
                     pause()
@@ -228,9 +243,12 @@ def game_loop():
             game_over = True
 
         snake1.score_display([50, 2], score)
-        snake1.eat(apples, generate_random_apple)
+        eaten = snake1.eat(apples)
         snake2.score_display([res_x - 150, 2], score)
-        snake2.eat(apples, generate_random_apple)
+        eaten += snake2.eat(apples)
+
+        for _ in range(eaten):
+            generate_random_apple([snake1, snake2])
 
         pygame.display.update()
 

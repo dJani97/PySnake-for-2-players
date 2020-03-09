@@ -10,8 +10,8 @@ from enum import IntEnum
 Game settings
 """
 
-
-fps = 12
+serial_read_loop_delay = 0.016
+fps = 8
 block_size = 20
 apple_size = 32
 apple_count = 1
